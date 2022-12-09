@@ -29,7 +29,23 @@ steps:
     echo Agent build directory $(Agent.BuildDirectory)
     echo Agent HomeDirectory directory $(Agent.HomeDirectory)
     #codeql database create --help
-    mkdir $(Agent.BuildDirectory)/s/codeql/codeql-dbs
-    $(Agent.BuildDirectory)/s/codeql/codeql database create $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo --language=java --source-root=.
+    #mkdir $(Agent.BuildDirectory)/s/codeql/codeql-dbs
+    #$(Agent.BuildDirectory)/s/codeql/codeql database create $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo --language=java --source-root=.
     #cd codeql
   displayName: 'Download Codeql CLI package'
+
+- script: |
+    echo current working directory
+    pwd
+    #codeql database create --help
+    mkdir $(Agent.BuildDirectory)/s/codeql/codeql-dbs
+    $(Agent.BuildDirectory)/s/codeql/codeql database create $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo --language=java --source-root=.
+
+    $(Agent.BuildDirectory)/s/codeql/codeql database analyze $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo java-code-scanning.qls --sarif-category=java \
+    --format=sarif-latest --output=/temp/Sec-demo-java-repo.sarif
+  displayName: 'configure and analyze codeql database'
+
+- script: |
+    echo "$TOKEN" | $(Agent.BuildDirectory)/s/codeql/codeql github upload-results --repository=Mariselvam-T/securityPOC-demo-java \
+    --ref=refs/heads/main --commit=deb275d2d5fe9a522a0b7bd8b6b6a1c939552718 \
+    --sarif=/temp/Sec-demo-java-repo.sarif --github-auth-stdin
