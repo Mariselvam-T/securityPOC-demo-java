@@ -1,0 +1,35 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
+
+- script: |
+    wget https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz
+    tar -xvzf ./codeql-bundle-linux64.tar.gz
+    echo current working directory
+    pwd
+    echo list directory
+    ls
+    ./codeql/codeql resolve qlpacks
+    echo Agent build directory $(Agent.BuildDirectory)
+    echo Agent HomeDirectory directory $(Agent.HomeDirectory)
+    #codeql database create --help
+    mkdir $(Agent.BuildDirectory)/s/codeql/codeql-dbs
+    $(Agent.BuildDirectory)/s/codeql/codeql database create $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo --language=java --source-root=.
+    #cd codeql
+  displayName: 'Download Codeql CLI package'
