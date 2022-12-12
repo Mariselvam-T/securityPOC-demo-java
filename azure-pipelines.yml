@@ -50,8 +50,9 @@ steps:
 - script: |
     echo "$GH_TOKEN"
     echo "$GITHUB_TOKEN"
+    echo $(GITPAT)
     $(Agent.BuildDirectory)/s/codeql/codeql github upload-results --help
     $(Agent.BuildDirectory)/s/codeql/codeql github upload-results --repository=Mariselvam-T/securityPOC-demo-java \
     --ref=refs/heads/main \
-    --sarif=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif --github-auth-stdin "$GH_TOKEN"
+    --sarif=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif --github-auth-stdin $(GITPAT)
   displayName: 'Upload results to Github'
