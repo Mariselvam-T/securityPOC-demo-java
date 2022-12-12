@@ -51,5 +51,5 @@ steps:
     echo "$GH_TOKEN"
     $(Agent.BuildDirectory)/s/codeql/codeql github upload-results --repository=Mariselvam-T/securityPOC-demo-java \
     --ref=refs/heads/main --commit=deb275d2d5fe9a522a0b7bd8b6b6a1c939552718 \
-    --sarif=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif --github-auth-stdin $(GH_TOKEN)
+    --sarif=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif --github-auth-stdin $GH_TOKEN
   displayName: 'Upload results to Github'
