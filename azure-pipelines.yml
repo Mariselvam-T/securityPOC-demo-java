@@ -54,5 +54,5 @@ steps:
     $(Agent.BuildDirectory)/s/codeql/codeql github upload-results --help
     $(Agent.BuildDirectory)/s/codeql/codeql github upload-results --repository=Mariselvam-T/securityPOC-demo-java \
     --ref=refs/heads/main \
-    --sarif=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif --github-auth-stdin $(GITPAT)
+    --sarif=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif --github-auth-stdin
   displayName: 'Upload results to Github'
