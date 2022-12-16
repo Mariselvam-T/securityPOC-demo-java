@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  name: PECOE-SelfHosted
+  name: PECOE-self-hosted
   #vmImage: ubuntu-latest
 
 steps:
