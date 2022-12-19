@@ -21,6 +21,8 @@ steps:
   displayName: 'Run a multi-line script'
 
 - script: |
+    echo current working directory
+    pwd
     wget https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz
     tar -xvzf ./codeql-bundle-linux64.tar.gz
     echo current working directory
