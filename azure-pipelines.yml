@@ -8,9 +8,9 @@ trigger:
 
 pool:
   #name: PECOE-self-hosted
-  name: LocalAgent
+  #name: LocalAgent
   #demands: aamead1eu2aa01
-  #vmImage: ubuntu-latest
+  vmImage: ubuntu-latest
 
 steps:
 - script: echo Hello, world!
@@ -44,7 +44,7 @@ steps:
     pwd
     #codeql database create --help
     mkdir $(Agent.BuildDirectory)/s/codeql/codeql-dbs
-    $(Agent.BuildDirectory)/s/codeql/codeql database create $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo --language=java --source-root=.
+    $(Agent.BuildDirectory)/s/codeql/codeql database create $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo --language=java --command="mvn compile -DskipTests" --source-root=.
 
     echo Agent Temp Directory directory $(Agent.TempDirectory)
     #mkdir $(Agent.TempDirectory)
