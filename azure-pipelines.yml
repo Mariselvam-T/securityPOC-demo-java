@@ -8,7 +8,7 @@ trigger:
 
 pool:
   name: PECOE-self-hosted
-  demands: aamead1eu2aa01
+  #demands: aamead1eu2aa01
   #vmImage: ubuntu-latest
 
 steps:
