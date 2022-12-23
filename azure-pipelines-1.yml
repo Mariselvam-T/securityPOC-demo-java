@@ -1,0 +1,50 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: 'Windows-latest'
+  # name: PECOE-self-hosted
+  # demands:
+  #   - Agent.Name -equals AAMEAD1CUWDA02
+
+steps:
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
+
+- powershell: |
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-win64.tar.gz -OutFile $(System.DefaultWorkingDirectory)/codeql-bundle-win64.tar.gz
+    tar -xvzf $(System.DefaultWorkingDirectory)/codeql-bundle-win64.tar.gz
+  displayName: 'Download Codeql CLI package'
+
+- script: |
+    echo current working directory
+    pwd
+    mkdir $(Agent.BuildDirectory)/s/codeql/codeql-dbs
+    $(Agent.BuildDirectory)/s/codeql/codeql database create $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo --language=java --command="mvn compile -DskipTests" --source-root=.
+
+    echo Agent Temp Directory directory $(Agent.TempDirectory)
+    $(Agent.BuildDirectory)/s/codeql/codeql database analyze $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo java-code-scanning.qls --sarif-category=java \
+    --format=sarif-latest --output=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif
+  displayName: 'configure and analyze codeql database'
+
+# - script: |
+#     echo "$token" | $(Agent.BuildDirectory)/s/codeql/codeql github upload-results --repository=Mariselvam-T/securityPOC-demo-java \
+#     --ref=refs/heads/main \
+#     --sarif=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif --github-auth-stdin
+#   env:
+#     token: $(gh.token)
+#   displayName: 'Upload results to Github'
+
+- powershell:
+  displayName: Upload CodeQL results to Github
+    script:echo $(TOKEN) | $(System.DefaultWorkingDirectory)/codeql/codeql github upload-results --repository=Mariselvam-T/securityPOC-demo-java --ref=refs/heads/main --sarif=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif --github-auth-stdin"
+  env:
+    TOKEN : $(gh.token)
