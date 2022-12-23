@@ -24,16 +24,15 @@ steps:
     tar -xvzf $(System.DefaultWorkingDirectory)/codeql-bundle-win64.tar.gz
   displayName: 'Download Codeql CLI package'
 
-- script: |
-    echo current working directory
-    pwd
-    mkdir $(Agent.BuildDirectory)/s/codeql/codeql-dbs
-    $(Agent.BuildDirectory)/s/codeql/codeql database create $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo --language=java --command="mvn compile -DskipTests" --source-root=.
+- powershell: |
+        mkdir $(Agent.BuildDirectory)/s/codeql/codeql-dbs
+        $(Agent.BuildDirectory)/s/codeql/codeql database create $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo --language=java --command="mvn compile -DskipTests" --source-root=.
+  displayName: 'Configure codeql database'
 
-    echo Agent Temp Directory directory $(Agent.TempDirectory)
+- powershell: |
     $(Agent.BuildDirectory)/s/codeql/codeql database analyze $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo java-code-scanning.qls --sarif-category=java \
     --format=sarif-latest --output=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif
-  displayName: 'configure and analyze codeql database'
+  displayName: 'Analyze codeql database'
 
 # - script: |
 #     echo "$token" | $(Agent.BuildDirectory)/s/codeql/codeql github upload-results --repository=Mariselvam-T/securityPOC-demo-java \
