@@ -7,10 +7,10 @@ trigger:
 - main
 
 pool:
-  vmImage: 'Windows-latest'
-  # name: PECOE-self-hosted
-  # demands:
-  #   - Agent.Name -equals AAMEAD1CUWDA02
+  #vmImage: 'Windows-latest'
+   name: PECOE-self-hosted
+   demands:
+     - Agent.Name -equals AAMEAD1CUWDA02
 
 steps:
 - script: |
