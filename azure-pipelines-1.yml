@@ -10,7 +10,8 @@ pool:
   #vmImage: 'Windows-latest'
    name: PECOE-self-hosted
    demands:
-     - Agent.Name -equals AAMEAD1CUWDA02
+     - Agent.Name -equals PWA-W01VUGEN07
+     #AAMEAD1CUWDA02
 
 steps:
 - script: |
