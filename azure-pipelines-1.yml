@@ -22,16 +22,15 @@ steps:
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12
     Invoke-WebRequest -Uri https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-win64.tar.gz -OutFile $(System.DefaultWorkingDirectory)/codeql-bundle-win64.tar.gz
     tar -xvzf $(System.DefaultWorkingDirectory)/codeql-bundle-win64.tar.gz
+    mkdir $(Agent.BuildDirectory)/s/codeql/codeql-dbs
   displayName: 'Download Codeql CLI package'
 
 - powershell: |
-        mkdir $(Agent.BuildDirectory)/s/codeql/codeql-dbs
         $(Agent.BuildDirectory)/s/codeql/codeql database create $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo --language=java --command="mvn compile -DskipTests" --source-root=.
   displayName: 'Configure codeql database'
 
 - powershell: |
-    $(Agent.BuildDirectory)/s/codeql/codeql database analyze $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo java-code-scanning.qls --sarif-category=java \
-    --format=sarif-latest --output=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif
+    $(Agent.BuildDirectory)/s/codeql/codeql database analyze $(Agent.BuildDirectory)/s/codeql/codeql-dbs/Sec-demo-java-repo java-code-scanning.qls --sarif-category=java --format=sarif-latest --output=$(Agent.TempDirectory)/Sec-demo-java-repo.sarif
   displayName: 'Analyze codeql database'
 
 # - script: |
